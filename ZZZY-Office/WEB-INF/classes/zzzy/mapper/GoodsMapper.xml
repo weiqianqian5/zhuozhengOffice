@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zzzy.mapper.GoodsMapper">
+	<resultMap id="BaseResultMap" type="zzzy.entity.Goods">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="category" jdbcType="VARCHAR" property="category" />
+		<result column="inuseNum" jdbcType="INTEGER" property="inusenum" />
+		<result column="stockNum" jdbcType="INTEGER" property="stocknum" />
+		<result column="vastageNum" jdbcType="INTEGER" property="vastagenum" />
+		<result column="total" jdbcType="INTEGER" property="total" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from goods
+		where id = #{id,jdbcType=INTEGER}
+  </delete>
+	<insert id="insert" parameterType="zzzy.entity.Goods">
+		insert into goods (id, name,
+		category,
+		inuseNum, stockNum, vastageNum,
+		total)
+		values
+		(#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{category,jdbcType=VARCHAR},
+		#{inusenum,jdbcType=INTEGER},
+		#{stocknum,jdbcType=INTEGER}, #{vastagenum,jdbcType=INTEGER},
+		#{total,jdbcType=INTEGER})
+  </insert>
+	<update id="updateByPrimaryKey" parameterType="zzzy.entity.Goods">
+		update goods
+		set
+		name = #{name,jdbcType=VARCHAR},
+		category =
+		#{category,jdbcType=VARCHAR},
+		inuseNum = #{inusenum,jdbcType=INTEGER},
+		stockNum = #{stocknum,jdbcType=INTEGER},
+		vastageNum =
+		#{vastagenum,jdbcType=INTEGER},
+		total = #{total,jdbcType=INTEGER}
+		where
+		id = #{id,jdbcType=INTEGER}
+  </update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select id, name, category, inuseNum, stockNum, vastageNum,
+		total
+		from goods
+		where id = #{id,jdbcType=INTEGER}
+  </select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select id, name, category,
+		inuseNum, stockNum, vastageNum,
+		total
+		from goods
+	</select>
+	<!-- 根据条件查询所有办公用品,分页 -->
+	<select id="selectAllGoodsByCondition" resultMap="BaseResultMap">
+		select id, name, category, inuseNum, stockNum, vastageNum, total
+		from
+		goods
+		<where>
+			<if test="goodsName != null">
+				and name =
+				#{goodsName,jdbcType=VARCHAR}
+			</if>
+			<if test="category != null">
+				and category =
+				#{category,jdbcType=VARCHAR}
+			</if>
+		</where>
+		<if test="begin != null">
+			LIMIT #{begin ,jdbcType=INTEGER},
+			#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+	<!-- 根据条件查询办公用品总记录数 -->
+	<select id="selectAllGoodstotal" resultType="java.lang.Integer">
+		select count(*)
+		from goods
+		<where>
+			<if test="goodsName != null">
+				and name =
+				#{goodsName,jdbcType=VARCHAR}
+			</if>
+			<if test="category != null">
+				and category =
+				#{category,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<!-- 根据办公用品名称查询 -->
+	<select id="selectByGoodsName" resultMap="BaseResultMap">
+		select id, name, category, inuseNum, stockNum, vastageNum, total
+		from
+		goods
+		<where>
+			<if test="goodsName != null">
+				and name =
+				#{goodsName,jdbcType=VARCHAR}
+			</if>
+
+		</where>
+	</select>
+
+</mapper>

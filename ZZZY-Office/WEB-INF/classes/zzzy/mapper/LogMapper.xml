@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zzzy.mapper.LogMapper">
+	<resultMap id="BaseResultMap" type="zzzy.entity.Log">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="operateType" jdbcType="VARCHAR" property="operatetype" />
+		<result column="operateUser" jdbcType="VARCHAR" property="operateuser" />
+		<result column="operateGoods" jdbcType="VARCHAR" property="operategoods" />
+		<result column="operateGoodsNum" jdbcType="INTEGER" property="operategoodsnum" />
+		<result column="operateTime" jdbcType="TIMESTAMP" property="operatetime" />
+		<result column="operateMemo" jdbcType="VARCHAR" property="operatememo" />
+		<result column="operateStaus" jdbcType="INTEGER" property="operatestaus" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from log
+		where id = #{id,jdbcType=INTEGER}
+  </delete>
+	<insert id="insert" parameterType="zzzy.entity.Log">
+		insert into log (id,
+		operateType, operateUser,
+		operateGoods, operateGoodsNum, operateTime,
+		operateMemo, operateStaus)
+		values (#{id,jdbcType=INTEGER},
+		#{operatetype,jdbcType=VARCHAR},
+		#{operateuser,jdbcType=VARCHAR},
+		#{operategoods,jdbcType=VARCHAR}, #{operategoodsnum,jdbcType=INTEGER},
+		#{operatetime,jdbcType=TIMESTAMP},
+		#{operatememo,jdbcType=VARCHAR},
+		#{operatestaus,jdbcType=INTEGER})
+  </insert>
+	<update id="updateByPrimaryKey" parameterType="zzzy.entity.Log">
+		update log
+		set
+		operateType = #{operatetype,jdbcType=VARCHAR},
+		operateUser =
+		#{operateuser,jdbcType=VARCHAR},
+		operateGoods =
+		#{operategoods,jdbcType=VARCHAR},
+		operateGoodsNum =
+		#{operategoodsnum,jdbcType=INTEGER},
+		operateTime =
+		#{operatetime,jdbcType=TIMESTAMP},
+		operateMemo =
+		#{operatememo,jdbcType=VARCHAR},
+		operateStaus =
+		#{operatestaus,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select id, operateType, operateUser, operateGoods,
+		operateGoodsNum,
+		operateTime,
+		operateMemo, operateStaus
+		from log
+		where id
+		= #{id,jdbcType=INTEGER}
+  </select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select id, operateType,
+		operateUser, operateGoods, operateGoodsNum,
+		operateTime,
+		operateMemo,
+		operateStaus
+		from log
+  </select>
+
+	<!-- 根据条件查询日志 -->
+	<select id="selectLogPage" resultMap="BaseResultMap">
+		select id, operateType, operateUser, operateGoods, operateGoodsNum,
+		operateTime,
+		operateMemo, operateStaus
+		from log
+		<where>
+			<if test="logSelectCondition != null">
+
+				<if test="logSelectCondition.operatetype != null">
+					and operateType =
+					#{logSelectCondition.operatetype,jdbcType=VARCHAR}
+				</if>
+				<if test="logSelectCondition.operateuser != null">
+					and operateUser =
+					#{logSelectCondition.operateuser,jdbcType=VARCHAR}
+				</if>
+				<if test="logSelectCondition.operategoods != null">
+					and operateGoods =
+					#{logSelectCondition.operategoods,jdbcType=VARCHAR}
+				</if>
+
+				<if test="logSelectCondition.operatetime != null">
+					and operateTime =
+					#{logSelectCondition.operatetime,jdbcType=TIMESTAMP}
+				</if>
+			</if>
+			<if test="operateStaus != null">
+				and operateStaus =
+				#{operateStaus,jdbcType=INTEGER}
+			</if>
+		</where>
+		<if test="begin != null">
+
+			LIMIT #{begin ,jdbcType=INTEGER},
+			#{pageSize,jdbcType=INTEGER}
+		</if>
+		<!--		<if test="pageNo != null">-->
+		<!--			LIMIT #{(pageNo-1)*2 ,jdbcType=INTEGER},-->
+		<!--			#{pageSize,jdbcType=INTEGER}-->
+		<!--		</if>-->
+	</select>
+	<!-- 根据条件查询日志总记录数 -->
+	<select id="selectTotalCount" resultType="java.lang.Integer">
+		select count(*)
+		from log
+		<where>
+			<if test="logSelectCondition != null">
+
+				<if test="logSelectCondition.operatetype != null">
+					and operateType =
+					#{logSelectCondition.operatetype,jdbcType=VARCHAR}
+				</if>
+				<if test="logSelectCondition.operateuser != null">
+					and operateUser =
+					#{logSelectCondition.operateuser,jdbcType=VARCHAR}
+				</if>
+				<if test="logSelectCondition.operategoods != null">
+					and operateGoods =
+					#{logSelectCondition.operategoods,jdbcType=VARCHAR}
+				</if>
+
+				<if test="logSelectCondition.operatetime != null">
+					and operateTime =
+					#{logSelectCondition.operatetime,jdbcType=TIMESTAMP}
+				</if>
+			</if>
+			<if test="operateStaus != null">
+				and operateStaus =
+				#{operateStaus,jdbcType=INTEGER}
+			</if>
+
+		</where>
+	</select>
+
+</mapper>
